@@ -52,41 +52,127 @@ export default function QuesSection({ navigation, route }) {
           </View>
         </View>
       </View>
-
       <View style={{ marginTop: -23 }}></View>
-
-      <View style={styles.hrStyle} />
-      {userAnswer !== "" ?
-        <Text style={styles.optionsStyle} onPress={() => setUserAnswer('')}>{userAnswer}</Text>
+      {(`${QuestionsDetails[questionNO].IsImageFormate}` !== "true") ?
+        <>
+          <View style={styles.hrStyle} />
+          {userAnswer !== "" ?
+            <Text style={styles.optionsStyle} onPress={() => setUserAnswer('')}>{userAnswer}</Text>
+            :
+            <Text style={styles.ansStyle}></Text>
+          }
+          <View style={styles.hrStyle} />
+          <Text style={styles.ansStyle}></Text>
+          <View style={styles.hrStyle} />
+        </>
         :
-        <Text style={styles.ansStyle}></Text>
+        <></>
       }
-      <View style={styles.hrStyle} />
-      <Text style={styles.ansStyle}></Text>
-      <View style={styles.hrStyle} />
-
       <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginTop: 50 }}>
-        {userAnswer !== `${QuestionsDetails[questionNO].options[0].a}` ?
-          <Text style={styles.optionsStyle} onPress={() => setUserAnswer(`${QuestionsDetails[questionNO].options[0].a}`)}>{QuestionsDetails[questionNO].options[0].a}</Text>
+        {(`${QuestionsDetails[questionNO].IsImageFormate}` === "true") ?
+          <>
+            {userAnswer !== `${QuestionsDetails[questionNO].options[0].a}` ?
+              <View style={[styles.optionsStyle, { borderWidth: 5, borderBottomWidth: 5, borderColor: '#CCCCCC', borderBottomColor: '#CCCCCC' }]} onTouchStart={() => setUserAnswer(`${QuestionsDetails[questionNO].options[0].a}`)}>
+                <Image
+                  style={{ width: 132, height: 110, resizeMode: "contain" }}
+                  source={{
+                    uri: `${QuestionsDetails[questionNO].options[0].a}`,
+                  }}
+                />
+              </View>
+              :
+              <View style={[styles.optionsStyle, { borderWidth: 5, borderBottomWidth: 5, borderColor: '#58CC02', borderBottomColor: '#58CC02' }]} onTouchStart={() => setUserAnswer(`${QuestionsDetails[questionNO].options[0].a}`)}>
+                <Image
+                  style={{ width: 132, height: 110, resizeMode: "contain" }}
+                  source={{
+                    uri: `${QuestionsDetails[questionNO].options[0].a}`,
+                  }}
+                />
+              </View>
+            }
+            {userAnswer !== `${QuestionsDetails[questionNO].options[0].b}` ?
+              <View style={[styles.optionsStyle, { borderWidth: 5, borderBottomWidth: 5, borderColor: '#CCCCCC', borderBottomColor: '#CCCCCC' }]} onTouchStart={() => setUserAnswer(`${QuestionsDetails[questionNO].options[0].b}`)}>
+                <Image
+                  style={{ width: 132, height: 110, resizeMode: "contain" }}
+                  source={{
+                    uri: `${QuestionsDetails[questionNO].options[0].b}`,
+                  }}
+                />
+              </View>
+              :
+              <View style={[styles.optionsStyle, { borderWidth: 5, borderBottomWidth: 5, borderColor: '#58CC02', borderBottomColor: '#58CC02' }]} onTouchStart={() => setUserAnswer(`${QuestionsDetails[questionNO].options[0].b}`)}>
+                <Image
+                  style={{ width: 132, height: 110, resizeMode: "contain" }}
+                  source={{
+                    uri: `${QuestionsDetails[questionNO].options[0].b}`,
+                  }}
+                />
+              </View>
+            }
+            {userAnswer !== `${QuestionsDetails[questionNO].options[0].c}` ?
+              <View style={[styles.optionsStyle, { borderWidth: 5, borderBottomWidth: 5, borderColor: '#CCCCCC', borderBottomColor: '#CCCCCC' }]} onTouchStart={() => setUserAnswer(`${QuestionsDetails[questionNO].options[0].c}`)}>
+                <Image
+                  style={{ width: 132, height: 110, resizeMode: "contain" }}
+                  source={{
+                    uri: `${QuestionsDetails[questionNO].options[0].c}`,
+                  }}
+                />
+              </View>
+              :
+              <View style={[styles.optionsStyle, { borderWidth: 5, borderBottomWidth: 5, borderColor: '#58CC02', borderBottomColor: '#58CC02' }]} onTouchStart={() => setUserAnswer(`${QuestionsDetails[questionNO].options[0].c}`)}>
+                <Image
+                  style={{ width: 132, height: 110, resizeMode: "contain" }}
+                  source={{
+                    uri: `${QuestionsDetails[questionNO].options[0].c}`,
+                  }}
+                />
+              </View>
+            }
+            {userAnswer !== `${QuestionsDetails[questionNO].options[0].d}` ?
+              <View style={[styles.optionsStyle, { borderWidth: 5, borderBottomWidth: 5, borderColor: '#CCCCCC', borderBottomColor: '#CCCCCC' }]} onTouchStart={() => setUserAnswer(`${QuestionsDetails[questionNO].options[0].d}`)}>
+                <Image
+                  style={{ width: 132, height: 110, resizeMode: "contain" }}
+                  source={{
+                    uri: `${QuestionsDetails[questionNO].options[0].d}`,
+                  }}
+                />
+              </View>
+              :
+              <View style={[styles.optionsStyle, { borderWidth: 5, borderBottomWidth: 5, borderColor: '#58CC02', borderBottomColor: '#58CC02' }]} onTouchStart={() => setUserAnswer(`${QuestionsDetails[questionNO].options[0].d}`)}>
+                <Image
+                  style={{ width: 132, height: 110, resizeMode: "contain" }}
+                  source={{
+                    uri: `${QuestionsDetails[questionNO].options[0].d}`,
+                  }}
+                />
+              </View>
+            }
+          </>
           :
-          <Text style={[styles.optionsStyle, { backgroundColor: '#c7c3c3', color: '#c7c3c3' }]} onPress={() => setUserAnswer(`${QuestionsDetails[questionNO].options[0].a}`)}>{QuestionsDetails[questionNO].options[0].a}</Text>
+          <>
+            {userAnswer !== `${QuestionsDetails[questionNO].options[0].a}` ?
+              <Text style={styles.optionsStyle} onPress={() => setUserAnswer(`${QuestionsDetails[questionNO].options[0].a}`)}>{QuestionsDetails[questionNO].options[0].a}</Text>
+              :
+              <Text style={[styles.optionsStyle, { backgroundColor: '#c7c3c3', color: '#c7c3c3' }]} onPress={() => setUserAnswer(`${QuestionsDetails[questionNO].options[0].a}`)}>{QuestionsDetails[questionNO].options[0].a}</Text>
+            }
+            {userAnswer !== `${QuestionsDetails[questionNO].options[0].b}` ?
+              <Text style={styles.optionsStyle} onPress={() => setUserAnswer(`${QuestionsDetails[questionNO].options[0].b}`)}>{QuestionsDetails[questionNO].options[0].b}</Text>
+              :
+              <Text style={[styles.optionsStyle, { backgroundColor: '#c7c3c3', color: '#c7c3c3' }]} onPress={() => setUserAnswer(`${QuestionsDetails[questionNO].options[0].b}`)}>{QuestionsDetails[questionNO].options[0].b}</Text>
+            }
+            {userAnswer !== `${QuestionsDetails[questionNO].options[0].c}` ?
+              <Text style={styles.optionsStyle} onPress={() => setUserAnswer(`${QuestionsDetails[questionNO].options[0].c}`)}>{QuestionsDetails[questionNO].options[0].c}</Text>
+              :
+              <Text style={[styles.optionsStyle, { backgroundColor: '#c7c3c3', color: '#c7c3c3' }]} onPress={() => setUserAnswer(`${QuestionsDetails[questionNO].options[0].c}`)}>{QuestionsDetails[questionNO].options[0].c}</Text>
+            }
+            {userAnswer !== `${QuestionsDetails[questionNO].options[0].d}` ?
+              <Text style={styles.optionsStyle} onPress={() => setUserAnswer(`${QuestionsDetails[questionNO].options[0].d}`)}>{QuestionsDetails[questionNO].options[0].d}</Text>
+              :
+              <Text style={[styles.optionsStyle, { backgroundColor: '#c7c3c3', color: '#c7c3c3' }]} onPress={() => setUserAnswer(`${QuestionsDetails[questionNO].options[0].d}`)}>{QuestionsDetails[questionNO].options[0].d}</Text>
+            }
+          </>
         }
-        {userAnswer !== `${QuestionsDetails[questionNO].options[0].b}` ?
-          <Text style={styles.optionsStyle} onPress={() => setUserAnswer(`${QuestionsDetails[questionNO].options[0].b}`)}>{QuestionsDetails[questionNO].options[0].b}</Text>
-          :
-          <Text style={[styles.optionsStyle, { backgroundColor: '#c7c3c3', color: '#c7c3c3' }]} onPress={() => setUserAnswer(`${QuestionsDetails[questionNO].options[0].b}`)}>{QuestionsDetails[questionNO].options[0].b}</Text>
-        }
-        {userAnswer !== `${QuestionsDetails[questionNO].options[0].c}` ?
-          <Text style={styles.optionsStyle} onPress={() => setUserAnswer(`${QuestionsDetails[questionNO].options[0].c}`)}>{QuestionsDetails[questionNO].options[0].c}</Text>
-          :
-          <Text style={[styles.optionsStyle, { backgroundColor: '#c7c3c3', color: '#c7c3c3' }]} onPress={() => setUserAnswer(`${QuestionsDetails[questionNO].options[0].c}`)}>{QuestionsDetails[questionNO].options[0].c}</Text>
-        }
-        {userAnswer !== `${QuestionsDetails[questionNO].options[0].d}` ?
-          <Text style={styles.optionsStyle} onPress={() => setUserAnswer(`${QuestionsDetails[questionNO].options[0].d}`)}>{QuestionsDetails[questionNO].options[0].d}</Text>
-          :
-          <Text style={[styles.optionsStyle, { backgroundColor: '#c7c3c3', color: '#c7c3c3' }]} onPress={() => setUserAnswer(`${QuestionsDetails[questionNO].options[0].d}`)}>{QuestionsDetails[questionNO].options[0].d}</Text>
-        }
-      </View>
+      </View >
 
       <View style={styles.bottomView}>
         {
@@ -144,7 +230,7 @@ export default function QuesSection({ navigation, route }) {
         }
       </View>
       <StatusBar style="auto" />
-    </View>
+    </View >
   );
 }
 
