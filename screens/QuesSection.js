@@ -3,7 +3,7 @@ import { StatusBar } from 'expo-status-bar';
 import { AntDesign } from '@expo/vector-icons';
 import { ProgressBar } from 'react-native-paper';
 import QuestionsDetails from '../components/QuestionsDetails';
-import { StyleSheet, Text, View, Image, TouchableHighlight, Button } from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableHighlight, Button, TextInput, FlatList, TouchableOpacity } from 'react-native';
 
 export default function QuesSection({ navigation, route }) {
   const [yourScore, setYourScore] = useState(0);
@@ -12,6 +12,17 @@ export default function QuesSection({ navigation, route }) {
   const [skipQuestion, setSkipQuestion] = useState(0);
   const [checkAnswer, setCheckAnswer] = useState(false);
   const [lastQuestion, setLastQuestion] = useState(false);
+  const [replacedQuestion, setReplacedQuestion] = useState('');
+  const [newDataKey, setNewDataKey] = useState('');
+  const [newDataValue, setNewDataValue] = useState('');
+  // const [matchLeftOptionA, setmatchLeftOptionA] = useState('');
+  // const [matchLeftOptionB, setmatchLeftOptionB] = useState('');
+  // const [matchLeftOptionC, setmatchLeftOptionC] = useState('');
+  // const [matchLeftOptionD, setmatchLeftOptionD] = useState('');
+  // const [matchRightOptionA, setmatchRightOptionA] = useState('');
+  // const [matchRightOptionB, setmatchRightOptionB] = useState('');
+  // const [matchRightOptionC, setmatchRightOptionC] = useState('');
+  // const [matchRightOptionD, setmatchRightOptionD] = useState('');
 
   useEffect(() => {
     if (route.params === undefined) {
@@ -24,6 +35,27 @@ export default function QuesSection({ navigation, route }) {
     }
   })
 
+  function replaceBlanks(questionVar, userAnswerVar) {
+    const replaceData = questionVar.replace("______", userAnswerVar);
+    setReplacedQuestion(replaceData)
+  }
+
+  function sufflingMatchingList() {
+    setNewDataKey([
+      { key: `${QuestionsDetails[questionNO].options[0].a.key}`, disabledStatus: `${QuestionsDetails[questionNO].options[0].a.disabledStatus}` },
+      { key: `${QuestionsDetails[questionNO].options[0].b.key}`, disabledStatus: `${QuestionsDetails[questionNO].options[0].b.disabledStatus}` },
+      { key: `${QuestionsDetails[questionNO].options[0].c.key}`, disabledStatus: `${QuestionsDetails[questionNO].options[0].c.disabledStatus}` },
+      { key: `${QuestionsDetails[questionNO].options[0].d.key}`, disabledStatus: `${QuestionsDetails[questionNO].options[0].d.disabledStatus}` },
+    ].sort(() => Math.random() - 0.5))
+
+    setNewDataValue([
+      { value: `${QuestionsDetails[questionNO].options[0].a.value}` },
+      { value: `${QuestionsDetails[questionNO].options[0].b.value}` },
+      { value: `${QuestionsDetails[questionNO].options[0].c.value}` },
+      { value: `${QuestionsDetails[questionNO].options[0].d.value}` },
+    ].sort(() => Math.random() - 0.5))
+  }
+
   return (
     <View style={styles.container}>
       <View style={styles.row}>
@@ -35,41 +67,126 @@ export default function QuesSection({ navigation, route }) {
         </View>
       </View>
 
-      <Text style={styles.mainHeading}>Translate this sentence</Text>
+      <Text style={styles.mainHeading}>{QuestionsDetails[questionNO].mainHeading}</Text>
 
-      <View style={{ marginTop: 30 }}>
-        <View style={styles.row}>
-          <View style={styles.column3}>
+      {(`${QuestionsDetails[questionNO].IsQuestionInMatchingFormate}` !== "true") ?
+        <>
+          {(`${QuestionsDetails[questionNO].IsQuestionInFillUpsFormate}` !== "true") ?
+            <>
+              {(`${QuestionsDetails[questionNO].IsQuestionInImageFormate}` !== "true") ?
+                <View style={{ marginTop: 30 }}>
+                  <View style={styles.row}>
+                    <View style={styles.column3}>
+                      <Image
+                        style={{ width: 120, height: 220, resizeMode: "contain" }}
+                        source={{
+                          uri: 'https://duoplanet.com/wp-content/uploads/2022/04/Duolingo-Eddy-1-640x1024.png',
+                        }}
+                      />
+                    </View>
+                    <View style={styles.column4}>
+                      <Text style={styles.quesStyle}>{QuestionsDetails[questionNO].Question}</Text>
+                    </View>
+                  </View>
+                </View>
+                :
+                <View style={{ alignItems: 'center' }}>
+                  <Image
+                    style={{ width: 200, height: 220, resizeMode: "contain" }}
+                    source={{
+                      uri: `${QuestionsDetails[questionNO].Question}`,
+                    }}
+                  />
+                </View>
+              }
+
+              <View style={{ marginTop: -23 }}></View>
+              {(`${QuestionsDetails[questionNO].IsQuestionInMCQsFormate}` === "true") ?
+                <>
+                  <View style={styles.hrStyle} />
+                  {userAnswer !== "" ?
+                    <Text style={styles.optionsStyle} onPress={() => setUserAnswer('')}>{userAnswer}</Text>
+                    :
+                    <Text style={styles.ansStyle}></Text>
+                  }
+                  <View style={styles.hrStyle} />
+                  <Text style={styles.ansStyle}></Text>
+                  <View style={styles.hrStyle} />
+                </>
+                :
+                <></>
+              }
+            </>
+            :
+            <>
+              <View style={{ alignItems: 'center' }}>
+                <Image
+                  style={{ width: 200, height: 220, resizeMode: "contain" }}
+                  source={{
+                    uri: 'https://duoplanet.com/wp-content/uploads/2022/04/Duolingo-Eddy-1-640x1024.png',
+                  }}
+                />
+              </View>
+              {replacedQuestion === "" ?
+                <Text style={[styles.quesStyle, { borderBottomLeftRadius: 20, width: '100%', marginLeft: -1 }]}>{QuestionsDetails[questionNO].Question}</Text>
+                :
+                <Text style={[styles.quesStyle, { borderBottomLeftRadius: 20, width: '100%', marginLeft: -1 }]}>{replacedQuestion}</Text>
+              }
+              <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginTop: 20 }}>
+                {userAnswer !== `${QuestionsDetails[questionNO].options[0].a}` ?
+                  <Text style={styles.optionsStyle} onPress={() => (replaceBlanks(`${QuestionsDetails[questionNO].Question}`, `${QuestionsDetails[questionNO].options[0].a}`), setUserAnswer(`${QuestionsDetails[questionNO].options[0].a}`))}>{QuestionsDetails[questionNO].options[0].a}</Text>
+                  :
+                  <Text style={[styles.optionsStyle, { backgroundColor: '#c7c3c3', color: '#c7c3c3' }]} onPress={() => (replaceBlanks(`${QuestionsDetails[questionNO].Question}`, '______'), setUserAnswer('______'))}>{QuestionsDetails[questionNO].options[0].a}</Text>
+                }
+                {userAnswer !== `${QuestionsDetails[questionNO].options[0].b}` ?
+                  <Text style={styles.optionsStyle} onPress={() => (replaceBlanks(`${QuestionsDetails[questionNO].Question}`, `${QuestionsDetails[questionNO].options[0].b}`), setUserAnswer(`${QuestionsDetails[questionNO].options[0].b}`))}>{QuestionsDetails[questionNO].options[0].b}</Text>
+                  :
+                  <Text style={[styles.optionsStyle, { backgroundColor: '#c7c3c3', color: '#c7c3c3' }]} onPress={() => (replaceBlanks(`${QuestionsDetails[questionNO].Question}`, '______'), setUserAnswer('______'))}>{QuestionsDetails[questionNO].options[0].b}</Text>
+                }
+                {userAnswer !== `${QuestionsDetails[questionNO].options[0].c}` ?
+                  <Text style={styles.optionsStyle} onPress={() => (replaceBlanks(`${QuestionsDetails[questionNO].Question}`, `${QuestionsDetails[questionNO].options[0].c}`), setUserAnswer(`${QuestionsDetails[questionNO].options[0].c}`))}>{QuestionsDetails[questionNO].options[0].c}</Text>
+                  :
+                  <Text style={[styles.optionsStyle, { backgroundColor: '#c7c3c3', color: '#c7c3c3' }]} onPress={() => (replaceBlanks(`${QuestionsDetails[questionNO].Question}`, '______'), setUserAnswer('______'))}>{QuestionsDetails[questionNO].options[0].c}</Text>
+                }
+                {userAnswer !== `${QuestionsDetails[questionNO].options[0].d}` ?
+                  <Text style={styles.optionsStyle} onPress={() => (replaceBlanks(`${QuestionsDetails[questionNO].Question}`, `${QuestionsDetails[questionNO].options[0].d}`), setUserAnswer(`${QuestionsDetails[questionNO].options[0].d}`))}>{QuestionsDetails[questionNO].options[0].d}</Text>
+                  :
+                  <Text style={[styles.optionsStyle, { backgroundColor: '#c7c3c3', color: '#c7c3c3' }]} onPress={() => (replaceBlanks(`${QuestionsDetails[questionNO].Question}`, '______'), setUserAnswer('______'))}>{QuestionsDetails[questionNO].options[0].d}</Text>
+                }
+              </View>
+            </>
+          }
+        </>
+        :
+        <>
+          <View style={{ alignItems: 'center' }}>
             <Image
-              style={{ width: 120, height: 220, resizeMode: "contain" }}
+              style={{ width: 200, height: 220, resizeMode: "cover" }}
               source={{
-                uri: 'https://duoplanet.com/wp-content/uploads/2022/04/Duolingo-Eddy-1-640x1024.png',
+                uri: `https://langcdn.ilovelanguages.com/what_are_the_duolingo_characters_names.png`,
               }}
             />
           </View>
-          <View style={styles.column4}>
-            <Text style={styles.quesStyle}>{QuestionsDetails[questionNO].Question}</Text>
+          <View style={styles.row} onLayout={() => sufflingMatchingList()}>
+            <View style={styles.column7}>
+              <FlatList
+                data={newDataKey}
+                renderItem={({ item }) =>
+                  <TouchableOpacity disabled={item.disabledStatus === 'false' ? false : true}><Text style={item.disabledStatus === 'false' ? [styles.optionsStyle, { width: '90%', textAlign: 'center', marginTop: 10 }] : [styles.optionsStyle, { width: '90%', textAlign: 'center', marginTop: 10, backgroundColor: '#E5E5E5', color: '#777777', borderBottomColor: `${userAnswer === item.value ? "#58CC02" : '#CCCCCC'}` }]}>{item.key}</Text></TouchableOpacity>}
+              />
+            </View>
+            <View style={styles.column8}>
+              <FlatList
+                data={newDataValue}
+                renderItem={({ item }) => <View onTouchStart={() => setUserAnswer(`${item.value}`)}><Text style={[styles.optionsStyle, { width: '90%', textAlign: 'center', marginTop: 10, borderWidth: 3, borderColor: `${userAnswer === item.value ? "#58CC02" : '#CCCCCC'}`, borderBottomColor: `${userAnswer === item.value ? "#58CC02" : '#CCCCCC'}` }]}>{item.value}</Text></View>}
+              />
+            </View>
           </View>
-        </View>
-      </View>
-      <View style={{ marginTop: -23 }}></View>
-      {(`${QuestionsDetails[questionNO].IsImageFormate}` !== "true") ?
-        <>
-          <View style={styles.hrStyle} />
-          {userAnswer !== "" ?
-            <Text style={styles.optionsStyle} onPress={() => setUserAnswer('')}>{userAnswer}</Text>
-            :
-            <Text style={styles.ansStyle}></Text>
-          }
-          <View style={styles.hrStyle} />
-          <Text style={styles.ansStyle}></Text>
-          <View style={styles.hrStyle} />
         </>
-        :
-        <></>
       }
+
       <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginTop: 50 }}>
-        {(`${QuestionsDetails[questionNO].IsImageFormate}` === "true") ?
+        {(`${QuestionsDetails[questionNO].IsOptionInImageFormate}` === "true") ?
           <>
             {userAnswer !== `${QuestionsDetails[questionNO].options[0].a}` ?
               <View style={[styles.optionsStyle, { borderWidth: 5, borderBottomWidth: 5, borderColor: '#CCCCCC', borderBottomColor: '#CCCCCC' }]} onTouchStart={() => setUserAnswer(`${QuestionsDetails[questionNO].options[0].a}`)}>
@@ -149,6 +266,9 @@ export default function QuesSection({ navigation, route }) {
             }
           </>
           :
+          <></>
+        }
+        {(`${QuestionsDetails[questionNO].IsQuestionInMCQsFormate}` === "true") ?
           <>
             {userAnswer !== `${QuestionsDetails[questionNO].options[0].a}` ?
               <Text style={styles.optionsStyle} onPress={() => setUserAnswer(`${QuestionsDetails[questionNO].options[0].a}`)}>{QuestionsDetails[questionNO].options[0].a}</Text>
@@ -171,6 +291,18 @@ export default function QuesSection({ navigation, route }) {
               <Text style={[styles.optionsStyle, { backgroundColor: '#c7c3c3', color: '#c7c3c3' }]} onPress={() => setUserAnswer(`${QuestionsDetails[questionNO].options[0].d}`)}>{QuestionsDetails[questionNO].options[0].d}</Text>
             }
           </>
+          :
+          <></>
+        }
+        {(`${QuestionsDetails[questionNO].IsQuestionInInputFormate}` === "true") ?
+          <TextInput style={styles.textArea}
+            placeholder="Type Something Here!"
+            multiline={true}
+            onChangeText={(text) => setUserAnswer(text.toUpperCase())}
+            value={userAnswer}
+          />
+          :
+          <></>
         }
       </View >
 
@@ -182,7 +314,7 @@ export default function QuesSection({ navigation, route }) {
                 <View style={{ backgroundColor: '#84e67e', padding: 10, borderRadius: 10 }}>
                   <Text style={{ fontSize: 20, textAlign: 'center', marginBottom: 5 }}> You are correct!</Text>
                   {(lastQuestion === (questionNO + 1)) ?
-                    <Button onPress={() => (setUserAnswer(""), setCheckAnswer(false), navigation.navigate("ScoreCardScreen", { yourScore: yourScore, skipQuestion: skipQuestion }))} title="Show Score Card" color="#3e9139" />
+                    <Button onPress={() => (setUserAnswer(""), setCheckAnswer(false), navigation.navigate("ScoreCardScreen", { yourScore: yourScore + 1, skipQuestion: skipQuestion }))} title="Show Score Card" color="#3e9139" />
                     :
                     <Button onPress={() => (setUserAnswer(""), setCheckAnswer(false), setYourScore(yourScore + 1), navigation.navigate("QuesSection", { questionNOParams: `${Number(questionNO + 1)}` }))} title="Continue" color="#3e9139" />
                   }
@@ -202,9 +334,6 @@ export default function QuesSection({ navigation, route }) {
             <View style={styles.row}>
               <View style={styles.column5}>
                 {(lastQuestion === (questionNO + 1)) ?
-                  // <TouchableHighlight style={styles.skipBtn} onPress={() => (setUserAnswer(""), setSkipQuestion(skipQuestion + 1), setCheckAnswer(false), navigation.navigate("ScoreCardScreen", { yourScore: yourScore, skipQuestion: skipQuestion }))}>
-                  //   <Text style={styles.skipBtnText}>SKIP</Text>
-                  // </TouchableHighlight>
                   <TouchableHighlight style={styles.skipBtn} onPress={() => (setUserAnswer(""), setCheckAnswer(false), navigation.navigate("ScoreCardScreen", { yourScore: yourScore, skipQuestion: skipQuestion + 1 }))}>
                     <Text style={styles.skipBtnText}>SKIP</Text>
                   </TouchableHighlight>
@@ -304,13 +433,20 @@ const styles = StyleSheet.create({
     right: 0,
     backgroundColor: '#fff',
     paddingHorizontal: 20,
-    marginBottom: 30,
+    paddingTop: 10,
+    paddingBottom: 30,
   },
   column5: {
     flex: 4,
   },
   column6: {
     flex: 8,
+  },
+  column7: {
+    flex: 6,
+  },
+  column8: {
+    flex: 6,
   },
   skipBtn: {
     padding: 8,
@@ -357,4 +493,16 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold'
   },
+  textArea: {
+    flex: 1,
+    textAlignVertical: 'top',
+    justifyContent: "flex-start",
+    backgroundColor: 'white',
+    borderWidth: 2,
+    height: 200,
+    padding: 10,
+    borderRadius: 5,
+    borderColor: '#CCCCCC'
+  }
 });
+
